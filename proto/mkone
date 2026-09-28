@@ -1,52 +1,35 @@
 #
 # mkone - build a single program from object files
 #
-# expects: TARG, OFILES, possibly HFILES, LIBS
-# LIBS is a list of library directories (will be toposorted and built)
-# Each lib dir should have a mkfile with LIB=libname.a
-# Include paths are derived: -I for each lib directory
-
+# expects: TARG, OFILES, possibly HFILES and LIBFILES
+# LIBFILES are the archives the program links, each a real prerequisite: the including mkfile gives every one a rule
+# that builds it in its own directory from that directory's sources, so that it is rebuilt when they change and made
+# from a clean tree. The variables go before the include, the rule after it (mk's default target is the first rule's,
+# which must stay all):
+#     LIBEEZO=../libeezo/libeezo.a
+#     LIBFILES=$LIBEEZO
+#     <$MKROOT/proto/mkone
+#     $LIBEEZO: `ls ../libeezo/*.[ch]`
+#         cd ../libeezo && mk libeezo.a
+# Header dependencies are HFILES (list the library headers the sources include), include paths are CFLAGS (-I..).
 PROG=$TARG
 
 all:V: $PROG
 
-$PROG: all-libs $OFILES
-	libfiles=""
-	for i in $LIBS; do
-		lib=`sed -n 's/^LIB=//p' $i/mkfile`
-		libfiles="$libfiles $i/$lib"
-	done
-	$LD -o $target $OFILES $LDFLAGS $libfiles
-
-all-libs:VQ:
-	test -z "$LIBS" && exit 0
-	for i in `toposort $LIBS`; do (cd $i && mk all); done
+$PROG: $OFILES $LIBFILES
+	$LD -o $target $OFILES $LDFLAGS $LIBFILES
 
 %.$O: %.c
-	libinc=""; for i in $LIBS; do libinc="$libinc -I`dirname $i`"; done; $CC $CFLAGS $libinc -c $stem.c -o $stem.$O
+	$CC $CFLAGS -c $stem.c -o $stem.$O
 
 %.$O: $HFILES
 
-install:V: install-libs $PROG
+install:V: $PROG
 	mkdir -p $PREFIX/bin
 	cp $PROG $PREFIX/bin/$TARG
 	chmod 755 $PREFIX/bin/$TARG
 
-install-libs:VQ:
-	test -z "$LIBS" && exit 0
-	for i in `toposort $LIBS`; do (cd $i && mk install); done
-
-clean:V: clean-libs
+clean:V:
 	rm -f $OFILES $PROG
 
-clean-libs:VQ:
-	test -z "$LIBS" && exit 0
-	for i in $LIBS; do (cd $i && mk clean); done
-
-nuke:V: nuke-libs
-	rm -f $OFILES $PROG
-
-nuke-libs:VQ:
-	test -z "$LIBS" && exit 0
-	for i in $LIBS; do (cd $i && mk nuke); done
-
+nuke:V: clean

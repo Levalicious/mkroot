@@ -2,5 +2,9 @@
 TARG=hello
 OFILES=hello.$O
 HFILES=../greet/greet.h
-LIBS=../greet
+CFLAGS=$CFLAGS -I..
+LIBGREET=../greet/libgreet.a
+LIBFILES=$LIBGREET
 <$MKROOT/proto/mkone
+$LIBGREET: `ls ../greet/*.[ch]`
+	cd ../greet && mk libgreet.a

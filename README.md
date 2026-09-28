@@ -74,12 +74,11 @@ objtype=arm mk
 ## This repository
 
 `mkroot` is the tree above, as installed under `/usr/share/mk` on our machines; every project of ours builds with
-`<$MKROOT/$objtype/mkfile` and one of the proto files. `mk` itself (and `toposort`, which `mkone`'s `all-libs`
-recipe needs) is the [mk](https://github.com/Levalicious/mk) repository.
+`<$MKROOT/$objtype/mkfile` and one of the proto files. `mk` itself is the [mk](https://github.com/Levalicious/mk) repository.
 
 In CI:
 
-    - uses: Levalicious/mk@<commit>          # mk + toposort on the PATH, objtype exported
+    - uses: Levalicious/mk@<commit>          # mk on the PATH, objtype exported
     - uses: Levalicious/mkroot@<commit>      # this tree checked out, MKROOT exported
 
 Pin both commits: a dependant fetches the versions it pinned, nothing else.
