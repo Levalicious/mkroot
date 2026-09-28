@@ -1,0 +1,5 @@
+<$MKROOT/$objtype/mkfile
+LIB=libgreet.a
+OFILES=greet.$O
+HFILES=greet.h
+<$MKROOT/proto/mklib

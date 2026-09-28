@@ -1,0 +1,6 @@
+<$MKROOT/$objtype/mkfile
+TARG=hello
+OFILES=hello.$O
+HFILES=../greet/greet.h
+LIBS=../greet
+<$MKROOT/proto/mkone

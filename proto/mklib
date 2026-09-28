@@ -1,0 +1,25 @@
+#
+# mklib - build a library from object files
+#
+# expects: LIB, OFILES, possibly HFILES
+
+all:V: $LIB
+
+$LIB: $OFILES
+	$AR $ARFLAGS $target $prereq
+	$RANLIB $target
+
+%.$O: %.c
+	$CC $CFLAGS -c $stem.c -o $stem.$O
+
+%.$O: $HFILES
+
+install:V: $LIB
+	mkdir -p $PREFIX/lib
+	cp $LIB $PREFIX/lib/
+	chmod 644 $PREFIX/lib/$LIB
+
+clean:V:
+	rm -f $OFILES $LIB
+
+nuke:V: clean

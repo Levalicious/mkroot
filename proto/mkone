@@ -1,0 +1,52 @@
+#
+# mkone - build a single program from object files
+#
+# expects: TARG, OFILES, possibly HFILES, LIBS
+# LIBS is a list of library directories (will be toposorted and built)
+# Each lib dir should have a mkfile with LIB=libname.a
+# Include paths are derived: -I for each lib directory
+
+PROG=$TARG
+
+all:V: $PROG
+
+$PROG: all-libs $OFILES
+	libfiles=""
+	for i in $LIBS; do
+		lib=`sed -n 's/^LIB=//p' $i/mkfile`
+		libfiles="$libfiles $i/$lib"
+	done
+	$LD -o $target $OFILES $LDFLAGS $libfiles
+
+all-libs:VQ:
+	test -z "$LIBS" && exit 0
+	for i in `toposort $LIBS`; do (cd $i && mk all); done
+
+%.$O: %.c
+	libinc=""; for i in $LIBS; do libinc="$libinc -I`dirname $i`"; done; $CC $CFLAGS $libinc -c $stem.c -o $stem.$O
+
+%.$O: $HFILES
+
+install:V: install-libs $PROG
+	mkdir -p $PREFIX/bin
+	cp $PROG $PREFIX/bin/$TARG
+	chmod 755 $PREFIX/bin/$TARG
+
+install-libs:VQ:
+	test -z "$LIBS" && exit 0
+	for i in `toposort $LIBS`; do (cd $i && mk install); done
+
+clean:V: clean-libs
+	rm -f $OFILES $PROG
+
+clean-libs:VQ:
+	test -z "$LIBS" && exit 0
+	for i in $LIBS; do (cd $i && mk clean); done
+
+nuke:V: nuke-libs
+	rm -f $OFILES $PROG
+
+nuke-libs:VQ:
+	test -z "$LIBS" && exit 0
+	for i in $LIBS; do (cd $i && mk nuke); done
+

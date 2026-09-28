@@ -1,0 +1,17 @@
+#
+# common mkfile parameters shared by all architectures
+#
+
+PREFIX=$HOME/.local
+
+YACC=yacc
+LEX=lex
+AWK=awk
+SED=sed
+NPROC=`nproc 2>/dev/null || echo 1`
+
+# clear variables that recursive mk might inherit
+TARG=
+OFILES=
+HFILES=
+YFILES=

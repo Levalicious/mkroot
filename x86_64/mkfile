@@ -1,0 +1,15 @@
+# x86_64 (amd64) architecture mkfile
+#
+<$MKROOT/proto/mkfile.proto
+
+CC=gcc
+LD=gcc
+AS=as
+AR=ar
+ARFLAGS=rcs
+RANLIB=ranlib
+O=o
+
+CFLAGS=-Wall -O2
+LDFLAGS=
+AFLAGS=

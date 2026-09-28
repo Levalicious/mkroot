@@ -1,0 +1,15 @@
+# i386 architecture mkfile
+#
+<$MKROOT/proto/mkfile.proto
+
+CC=gcc
+LD=gcc
+AS=as
+AR=ar
+ARFLAGS=rcs
+RANLIB=ranlib
+O=o
+
+CFLAGS=-Wall -O2 -m32
+LDFLAGS=-m32
+AFLAGS=

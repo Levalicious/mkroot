@@ -1,0 +1,15 @@
+# ARM (32-bit) architecture mkfile - cross compilation
+#
+<$MKROOT/proto/mkfile.proto
+
+CC=arm-linux-gnueabihf-gcc
+LD=arm-linux-gnueabihf-gcc
+AS=arm-linux-gnueabihf-as
+AR=arm-linux-gnueabihf-ar
+ARFLAGS=rcs
+RANLIB=arm-linux-gnueabihf-ranlib
+O=arm.o
+
+CFLAGS=-Wall -O2
+LDFLAGS=
+AFLAGS=

@@ -1,0 +1,16 @@
+name: ci
+on:
+  push:
+  pull_request:
+jobs:
+  smoke:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: Levalicious/mk@2e9df12fdc3a4d9a2793cb2d6d641817bd83cbbc
+      - uses: ./
+      - name: a library and a program through mklib and mkone (all-libs, toposort)
+        run: |
+          echo "MKROOT=$MKROOT objtype=$objtype"
+          cd test/hello && mk && ./hello | grep -q 'hello from mkroot'
+      - run: cd test/hello && mk clean && test ! -e hello && test ! -e ../greet/libgreet.a

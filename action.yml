@@ -1,0 +1,7 @@
+name: setup-mkroot
+description: Make this repository's proto mkfiles (at the commit the caller pinned) the MKROOT of the job.
+runs:
+  using: composite
+  steps:
+    - shell: bash
+      run: echo "MKROOT=${{ github.action_path }}" >> "$GITHUB_ENV"

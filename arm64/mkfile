@@ -1,0 +1,15 @@
+# ARM64 (aarch64) architecture mkfile - cross compilation
+#
+<$MKROOT/proto/mkfile.proto
+
+CC=aarch64-linux-gnu-gcc
+LD=aarch64-linux-gnu-gcc
+AS=aarch64-linux-gnu-as
+AR=aarch64-linux-gnu-ar
+ARFLAGS=rcs
+RANLIB=aarch64-linux-gnu-ranlib
+O=arm64.o
+
+CFLAGS=-Wall -O2
+LDFLAGS=
+AFLAGS=
