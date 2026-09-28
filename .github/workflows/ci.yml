@@ -13,4 +13,5 @@ jobs:
         run: |
           echo "MKROOT=$MKROOT objtype=$objtype"
           cd test/hello && mk && ./hello | grep -q 'hello from mkroot'
-      - run: cd test/hello && mk clean && test ! -e hello && test ! -e ../greet/libgreet.a
+      - name: each directory cleans its own products
+        run: cd test/hello && mk clean && test ! -e hello && test -e ../greet/libgreet.a && (cd ../greet && mk clean) && test ! -e ../greet/libgreet.a
