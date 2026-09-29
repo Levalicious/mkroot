@@ -5,7 +5,10 @@
 
 all:V: $LIB
 
+# the archive is made afresh from $OFILES: ar only replaces and adds members, so updating it in place kept the
+# member of a source that had gone (a stale res.o doubled its symbols in libeezo, 2026-09-29)
 $LIB: $OFILES
+	rm -f $target
 	$AR $ARFLAGS $target $prereq
 	$RANLIB $target
 
